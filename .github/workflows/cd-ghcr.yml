@@ -2,7 +2,8 @@ name: Build - Push Docker image to ghcr
 
 on:
   push:
-    - main
+    branches:
+      - main
 
 jobs:
   build-push:
