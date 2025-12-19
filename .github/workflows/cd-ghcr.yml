@@ -1,0 +1,32 @@
+name: Build - Push Docker image to ghcr
+
+on:
+  push:
+    - main
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      content: read
+      packages: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/tp4-todo-api:latest ./src/api
+
+      - name: Push
+        run: |
+          docker push ghcr.io/${{ github.repository }}/tp4-todo-api:latest      
